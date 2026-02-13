@@ -3,6 +3,11 @@ let scene, camera, renderer, nodeStructure, time = 0;
 
 // Initialize Three.js 3D Animation
 // Initialize Three.js 3D Animation
+// Initialize Three.js 3D Animation
+// Initialize Three.js 3D Animation
+// Initialize Three.js 3D Animation
+// Initialize Three.js 3D Animation
+// Initialize Three.js 3D Animation
 function initThree() {
     const container = document.getElementById('hero-canvas');
     if (!container) return;
@@ -12,146 +17,128 @@ function initThree() {
 
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 1000);
-    camera.position.z = 400;
+    camera.position.z = 600;
 
     renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    container.innerHTML = ''; // Clear existing
+    container.innerHTML = '';
     container.appendChild(renderer.domElement);
 
-    // Create Neural Network Mesh
-    const particleCount = 100;
     const group = new THREE.Group();
     scene.add(group);
 
-    // Particles
-    const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    const particleData = [];
+    // 1. Hex Shield (Wireframe Sphere) - Scaled UP
+    const geometry = new THREE.IcosahedronGeometry(180, 2); // Increased Radius
+    const material = new THREE.MeshBasicMaterial({
+        color: 0x00C2FF,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.5,
+        blending: THREE.AdditiveBlending
+    });
+    const shield = new THREE.Mesh(geometry, material);
+    group.add(shield);
 
-    for (let i = 0; i < particleCount; i++) {
-        const x = Math.random() * 400 - 200;
-        const y = Math.random() * 400 - 200;
-        const z = Math.random() * 400 - 200;
-
-        positions[i * 3] = x;
-        positions[i * 3 + 1] = y;
-        positions[i * 3 + 2] = z;
-
-        particleData.push({
-            velocity: new THREE.Vector3(-1 + Math.random() * 2, -1 + Math.random() * 2, -1 + Math.random() * 2),
-            numConnections: 0
-        });
-    }
-
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-    // Material for dots
-    const pMaterial = new THREE.PointsMaterial({
+    // 1b. Vertex Particles (New Layer)
+    // Add glowing dots at every vertex of the shield for extra density
+    const particleMaterial = new THREE.PointsMaterial({
         color: 0x00C2FF,
         size: 3,
-        blending: THREE.AdditiveBlending,
         transparent: true,
-        sizeAttenuation: false
+        opacity: 0.8,
+        blending: THREE.AdditiveBlending
     });
+    const shieldParticles = new THREE.Points(geometry, particleMaterial);
+    group.add(shieldParticles);
 
-    const particles = new THREE.Points(geometry, pMaterial);
-    group.add(particles);
-
-    // Lines geometry
-    const lineGeometry = new THREE.BufferGeometry();
-    const lineMaterial = new THREE.LineBasicMaterial({
+    // 2. Inner Reactor Core - Scaled UP
+    const coreGeometry = new THREE.IcosahedronGeometry(100, 4); // Increased Radius
+    const coreMaterial = new THREE.MeshBasicMaterial({
         color: 0xB026FF,
+        wireframe: true,
         transparent: true,
         opacity: 0.3,
         blending: THREE.AdditiveBlending
     });
+    const core = new THREE.Mesh(coreGeometry, coreMaterial);
+    group.add(core);
 
-    const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
-    group.add(lines);
+    // Solid Core Glow - Scaled UP
+    const glowGeometry = new THREE.SphereGeometry(80, 32, 32); // Increased Radius
+    const glowMaterial = new THREE.MeshBasicMaterial({
+        color: 0x00C2FF,
+        transparent: true,
+        opacity: 0.2,
+        blending: THREE.AdditiveBlending
+    });
+    const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+    group.add(glow);
 
-    // Mouse interaction
+    // 3. Orbiting Satellites - Increased Count
+    const satGeometry = new THREE.BoxGeometry(8, 8, 8); // Slightly smaller for swarm look
+    const satMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+    const satellites = [];
+
+    // Increased from 6 to 20
+    for (let i = 0; i < 20; i++) {
+        const sat = new THREE.Mesh(satGeometry, satMaterial);
+        const satGroup = new THREE.Group(); // Pivot for orbit
+        satGroup.add(sat);
+
+        // Push them further out due to larger shield
+        sat.position.x = 220 + Math.random() * 60;
+        satGroup.rotation.x = Math.random() * Math.PI;
+        satGroup.rotation.y = Math.random() * Math.PI;
+
+        group.add(satGroup);
+        satellites.push({ mesh: sat, pivot: satGroup, speed: 0.005 + Math.random() * 0.015 });
+    }
+
+    // Mouse Interaction
     let mouseX = 0;
     let mouseY = 0;
 
     document.addEventListener('mousemove', (event) => {
-        mouseX = (event.clientX - window.innerWidth / 2) * 0.5;
-        mouseY = (event.clientY - window.innerHeight / 2) * 0.5;
+        mouseX = (event.clientX - window.innerWidth / 2) * 0.001;
+        mouseY = (event.clientY - window.innerHeight / 2) * 0.001;
     });
 
-    // Handle window resize
-    window.addEventListener('resize', () => {
+    // Use ResizeObserver for accurate sizing
+    const resizeObserver = new ResizeObserver(() => {
         const w = container.clientWidth;
         const h = container.clientHeight;
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
         renderer.setSize(w, h);
     });
-
-    // Animation variables
-    const r = 400;
-    const rHalf = r / 2;
+    resizeObserver.observe(container);
 
     function animate() {
         requestAnimationFrame(animate);
 
-        group.rotation.y += 0.002;
-        group.rotation.x += 0.001;
+        // Rotate Shield & Particles
+        shield.rotation.y += 0.002;
+        shield.rotation.x -= 0.001;
+        shieldParticles.rotation.copy(shield.rotation); // Sync particles with shield
 
-        // Mouse interaction tilt
-        camera.position.x += (mouseX - camera.position.x) * 0.05;
-        camera.position.y += (-mouseY - camera.position.y) * 0.05;
-        camera.lookAt(scene.position);
+        // Rotate Core (Faster)
+        core.rotation.y -= 0.01;
+        core.rotation.z += 0.01;
 
-        // Update positions
-        const positions = particles.geometry.attributes.position.array;
-        let vertexpos = 0;
-        let colorpos = 0;
-        let numConnected = 0;
+        // Orbit Satellites
+        satellites.forEach(sat => {
+            sat.pivot.rotation.y += sat.speed;
+            sat.mesh.rotation.x += 0.02; // Spin the satellite itself
+        });
 
-        // Reset line positions
-        const linePositions = [];
-        // const lineColors = [];
+        // Mouse tilt
+        group.rotation.x += (mouseY - group.rotation.x) * 0.05;
+        group.rotation.y += (mouseX - group.rotation.y) * 0.05;
 
-        for (let i = 0; i < particleCount; i++) {
-            particleData[i].numConnections = 0;
-
-            // Get particle position
-            const x = positions[i * 3];
-            const y = positions[i * 3 + 1];
-            const z = positions[i * 3 + 2];
-
-            // Update position
-            particleData[i].velocity.x;
-            particleData[i].velocity.y;
-            particleData[i].velocity.z;
-
-            // We keep them static relative to each other for this specific visual style 
-            // to maintain the "brain/cloud" shape, just rotating the group involves motion.
-            // If we wanted individual motion we'd update positions here.
-
-            // Check connections
-            for (let j = i + 1; j < particleCount; j++) {
-                const dx = positions[i * 3] - positions[j * 3];
-                const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
-                const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
-                const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-                if (dist < 90) { // Connection distance
-                    particleData[i].numConnections++;
-                    particleData[j].numConnections++;
-
-                    // Add line
-                    linePositions.push(
-                        positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2],
-                        positions[j * 3], positions[j * 3 + 1], positions[j * 3 + 2]
-                    );
-                }
-            }
-        }
-
-        lines.geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+        // Pulse Core
+        const scale = 1 + Math.sin(Date.now() * 0.003) * 0.1;
+        core.scale.set(scale, scale, scale);
 
         renderer.render(scene, camera);
     }
@@ -271,170 +258,149 @@ window.addEventListener('resize', animateTimeline);
 // Initial check
 animateTimeline();
 
-// Spotlight Effect
-document.querySelectorAll('.service-card, .industry-card').forEach(card => {
-    // Add spotlight element
-    const spotlight = document.createElement('div');
-    spotlight.classList.add('spotlight');
-    card.appendChild(spotlight);
-
-    // Track mouse movement
-    card.addEventListener('mousemove', e => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
-    });
-});
+// Holographic Code Moved to DOMContentLoaded
 
 // Particle Background System
+// Particle Background System
 function initParticles() {
-    const canvas = document.createElement('canvas');
-    canvas.id = 'particle-canvas';
-    canvas.style.position = 'fixed';
-    canvas.style.top = '0';
-    canvas.style.left = '0';
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.style.zIndex = '-1';
-    canvas.style.pointerEvents = 'none';
-    document.body.prepend(canvas);
+    // Create canvas if it doesn't exist
+    let canvas = document.getElementById('particle-canvas');
+    if (!canvas) {
+        canvas = document.createElement('canvas');
+        canvas.id = 'particle-canvas';
+        canvas.style.position = 'fixed';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.style.zIndex = '-1';
+        canvas.style.pointerEvents = 'none';
+        document.body.prepend(canvas);
+    }
 
     const ctx = canvas.getContext('2d');
-    let width, height;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+
+    canvas.width = width;
+    canvas.height = height;
+
     let particles = [];
 
     // Mouse tracking
-    let mouse = { x: null, y: null, radius: 150 };
+    let mouse = {
+        x: null,
+        y: null,
+        radius: 150
+    }
 
-    window.addEventListener('mousemove', (e) => {
-        mouse.x = e.x;
-        mouse.y = e.y;
+    window.addEventListener('mousemove', (event) => {
+        mouse.x = event.x;
+        mouse.y = event.y;
     });
 
-    // Resize handler
-    function resize() {
+    // Resize
+    window.addEventListener('resize', () => {
         width = window.innerWidth;
         height = window.innerHeight;
         canvas.width = width;
         canvas.height = height;
-    }
-
-    window.addEventListener('resize', resize);
-    resize();
+        init();
+    });
 
     // Particle class
     class Particle {
         constructor() {
             this.x = Math.random() * width;
             this.y = Math.random() * height;
-            this.vx = (Math.random() - 0.5) * 0.5;
-            this.vy = (Math.random() - 0.5) * 0.5;
-            this.size = Math.random() * 2;
-            this.baseX = this.x;
-            this.baseY = this.y;
-            this.density = (Math.random() * 30) + 1;
+            this.dx = (Math.random() - 0.5) * 0.2; // Slower speed
+            this.dy = (Math.random() - 0.5) * 0.2;
+            this.size = (Math.random() * 2) + 1;
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+            ctx.fillStyle = 'rgba(100, 200, 255, 0.3)'; // Subtle cyan/white
+            ctx.fill();
         }
 
         update() {
-            // Mouse interaction
+            if (this.x > width || this.x < 0) {
+                this.dx = -this.dx;
+            }
+            if (this.y > height || this.y < 0) {
+                this.dy = -this.dy;
+            }
+
+            // Mouse interaction (Gentle repel)
             if (mouse.x != null) {
                 let dx = mouse.x - this.x;
                 let dy = mouse.y - this.y;
                 let distance = Math.sqrt(dx * dx + dy * dy);
 
                 if (distance < mouse.radius) {
-                    const forceDirectionX = dx / distance;
-                    const forceDirectionY = dy / distance;
-                    const maxDistance = mouse.radius;
-                    const force = (maxDistance - distance) / maxDistance;
-                    const directionX = forceDirectionX * force * this.density;
-                    const directionY = forceDirectionY * force * this.density;
-
-                    this.x -= directionX;
-                    this.y -= directionY;
-                } else {
-                    if (this.x !== this.baseX) {
-                        let dx = this.x - this.baseX;
-                        this.x -= dx / 10;
+                    if (mouse.x < this.x && this.x < width - 10) {
+                        this.x += 2;
                     }
-                    if (this.y !== this.baseY) {
-                        let dy = this.y - this.baseY;
-                        this.y -= dy / 10;
+                    if (mouse.x > this.x && this.x > 10) {
+                        this.x -= 2;
+                    }
+                    if (mouse.y < this.y && this.y < height - 10) {
+                        this.y += 2;
+                    }
+                    if (mouse.y > this.y && this.y > 10) {
+                        this.y -= 2;
                     }
                 }
             }
 
-            // Normal movement
-            this.x += this.vx;
-            this.y += this.vy;
-
-            // Screen wrap
-            if (this.x < 0) this.x = width;
-            if (this.x > width) this.x = 0;
-            if (this.y < 0) this.y = height;
-            if (this.y > height) this.y = 0;
-        }
-
-        draw() {
-            ctx.fillStyle = 'rgba(0, 194, 255, 0.4)';
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fill();
+            this.x += this.dx;
+            this.y += this.dy;
+            this.draw();
         }
     }
 
-    // Create particles
-    for (let i = 0; i < 80; i++) {
-        particles.push(new Particle());
+    function init() {
+        particles = [];
+        let numberOfParticles = (width * height) / 15000;
+        for (let i = 0; i < numberOfParticles; i++) {
+            particles.push(new Particle());
+        }
     }
 
-    // Animation loop
     function animate() {
+        requestAnimationFrame(animate);
         ctx.clearRect(0, 0, width, height);
 
-        particles.forEach(p => {
-            p.update();
-            p.draw();
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].update();
+        }
 
-            // Connect particles
-            particles.forEach(p2 => {
-                const dx = p.x - p2.x;
-                const dy = p.y - p2.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
+        connect();
+    }
 
-                if (distance < 100) {
+    function connect() {
+        let opacityValue = 1;
+        for (let a = 0; a < particles.length; a++) {
+            for (let b = a; b < particles.length; b++) {
+                let distance = ((particles[a].x - particles[b].x) * (particles[a].x - particles[b].x))
+                    + ((particles[a].y - particles[b].y) * (particles[a].y - particles[b].y));
+
+                if (distance < (width / 7) * (height / 7)) {
+                    opacityValue = 1 - (distance / 20000);
+                    ctx.strokeStyle = 'rgba(100, 200, 255,' + (opacityValue * 0.1) + ')';
+                    ctx.lineWidth = 1;
                     ctx.beginPath();
-                    ctx.strokeStyle = `rgba(0, 194, 255, ${0.1 * (1 - distance / 100)})`;
-                    ctx.lineWidth = 0.5;
-                    ctx.moveTo(p.x, p.y);
-                    ctx.lineTo(p2.x, p2.y);
-                    ctx.stroke();
-                }
-            });
-
-            // Connect to mouse
-            if (mouse.x != null) {
-                const dx = p.x - mouse.x;
-                const dy = p.y - mouse.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance < mouse.radius) {
-                    ctx.beginPath();
-                    ctx.strokeStyle = `rgba(0, 194, 255, ${0.2 * (1 - distance / mouse.radius)})`;
-                    ctx.lineWidth = 0.8;
-                    ctx.moveTo(p.x, p.y);
-                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.moveTo(particles[a].x, particles[a].y);
+                    ctx.lineTo(particles[b].x, particles[b].y);
                     ctx.stroke();
                 }
             }
-        });
-
-        requestAnimationFrame(animate);
+        }
     }
 
+    init();
     animate();
 }
 
@@ -518,7 +484,142 @@ document.querySelectorAll('section').forEach(section => {
     revealObserver.observe(section);
 });
 
+// 4. Floating HUD Navbar
+window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    if (window.scrollY > 50) {
+        nav.classList.add('nav-floating');
+    } else {
+        nav.classList.remove('nav-floating');
+    }
+});
+
 // Initialize Effects
 document.addEventListener('DOMContentLoaded', () => {
     typeWriterEffect();
+
+    // Holographic 3D Tilt & Spotlight Effect
+    document.querySelectorAll('.service-card, .industry-card').forEach(card => {
+        // Add spotlight element
+        const spotlight = document.createElement('div');
+        spotlight.classList.add('spotlight');
+        card.appendChild(spotlight);
+
+        // Add scan line element
+        const scanLine = document.createElement('div');
+        scanLine.classList.add('scan-line');
+        card.appendChild(scanLine);
+
+        // Track mouse movement
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Spotlight position
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+
+            // 3D Tilt Calculation
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            // Calculate roatation based on cursor position relative to center
+            // Max rotation: +/- 10 degrees
+            const rotateX = ((y - centerY) / centerY) * -10;
+            const rotateY = ((x - centerX) / centerX) * 10;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+        });
+
+        // Reset on mouse leave
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+        });
+    });
+
+    // Terminal Footer Logic
+    function initTerminalFooter() {
+        // 1. UTC Clock
+        const timeDisplay = document.getElementById('utc-time');
+        if (timeDisplay) {
+            setInterval(() => {
+                const now = new Date();
+                timeDisplay.textContent = now.toISOString().split('T')[1].split('.')[0];
+            }, 1000);
+        }
+
+        // 2. Random Latency
+        const latencyDisplay = document.getElementById('sys-latency');
+        if (latencyDisplay) {
+            setInterval(() => {
+                const ms = Math.floor(Math.random() * 40) + 10;
+                latencyDisplay.textContent = `${ms}ms`;
+                latencyDisplay.style.color = ms > 40 ? '#ff3333' : 'inherit';
+            }, 2000);
+        }
+        // 3. (Logs Removed)
+    }
+
+    initTerminalFooter();
+
+    // Interactive Precision Cursor
+    function initCustomCursor() {
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorReticle = document.querySelector('.cursor-reticle');
+
+        // Hide if elements don't exist (e.g. touch device fallback)
+        if (!cursorDot || !cursorReticle) return;
+
+        let mouseX = 0;
+        let mouseY = 0;
+        let reticleX = 0;
+        let reticleY = 0;
+
+        // Track mouse position
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            // Dot follows instantly
+            cursorDot.style.left = `${mouseX}px`;
+            cursorDot.style.top = `${mouseY}px`;
+        });
+
+        // Reticle follows with delay (Loop)
+        function animateReticle() {
+            // Linear interpolation for smooth lag (0.15 = speed)
+            reticleX += (mouseX - reticleX) * 0.15;
+            reticleY += (mouseY - reticleY) * 0.15;
+
+            cursorReticle.style.left = `${reticleX}px`;
+            cursorReticle.style.top = `${reticleY}px`;
+
+            requestAnimationFrame(animateReticle);
+        }
+        animateReticle();
+
+        // Hover Interactions
+        const interactiveElements = document.querySelectorAll('a, button, .service-card, .industry-card, .sys-link, .tech-item');
+
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                document.body.classList.add('cursor-hover');
+            });
+            el.addEventListener('mouseleave', () => {
+                document.body.classList.remove('cursor-hover');
+            });
+        });
+
+        // Click Interactions
+        document.addEventListener('mousedown', () => {
+            document.body.classList.add('cursor-active');
+        });
+
+        document.addEventListener('mouseup', () => {
+            document.body.classList.remove('cursor-active');
+        });
+    }
+
+    initCustomCursor();
 });
