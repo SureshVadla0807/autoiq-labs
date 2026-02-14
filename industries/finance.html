@@ -330,48 +330,49 @@
         </div>
     </section>
 
-    <footer>
-        <div class="terminal-footer">
-            <div class="sys-status-bar">
-                <span>SYSTEM: ONLINE</span>
-                <span>SECURE CONNECTION ESTABLISHED</span>
-                <span id="sys-latency" style="color: #00ff41;">LATENCY: 12ms</span>
+    <footer class="terminal-footer">
+        <div class="sys-status-bar">
+            <span class="status-item"><span class="led green"></span>SYSTEM: ONLINE</span>
+            <span class="status-item">SECURE CONNECTION ESTABLISHED</span>
+            <span class="status-item">LATENCY: <span id="sys-latency">12ms</span></span>
+            <span class="status-item right">V.2.4.0</span>
+        </div>
+
+        <div class="sys-grid">
+            <div class="sys-col sys-identity">
+                <img src="../images/autoiq-logo-white.png" alt="AutoIQ Labs"
+                    style="max-width: 180px; height: auto; margin-bottom: 20px;">
+                <p class="sys-desc">ADVANCED_AUTOMATION_SYSTEMS</p>
+                <p class="sys-desc">Auth: GUEST_SESSION</p>
             </div>
-            <div class="sys-grid">
-                <div class="sys-col sys-identity">
-                    <img src="../images/autoiq-logo-white.png" alt="AutoIQ Labs"
-                        style="max-width: 180px; height: auto; margin-bottom: 20px;">
-                    <p class="sys-desc">ADVANCED_AUTOMATION_SYSTEMS</p>
-                    <p class="sys-desc">Auth: GUEST_SESSION</p>
-                </div>
-                <div class="sys-col sys-nav">
-                    <div class="sys-header">> NAVIGATION_INDEX</div>
-                    <a href="../index.html" class="sys-link">> /home</a>
-                    <a href="../index.html#services" class="sys-link">> /services</a>
-                    <a href="../index.html#industries" class="sys-link">> /industries</a>
-                    <a href="../about.html" class="sys-link">> /about</a>
-                    <a href="../contact.html" class="sys-link">> /contact</a>
-                </div>
-                <div class="sys-col sys-data">
-                    <div class="sys-header">> COMPANY_INFO</div>
-                    <div class="sys-contact">
-                        <p>123 Innovation Drive<br>Tech District, CA 94000</p>
-                        <p>contact@autoiqlabs.com</p>
-                        <p>+1 (555) 123-4567</p>
-                        <div class="sys-socials">
-                            <a href="#">[LINKEDIN]</a>
-                            <a href="#">[TWITTER]</a>
-                            <a href="#">[GITHUB]</a>
-                        </div>
+
+            <div class="sys-col sys-nav">
+                <div class="sys-header">> NAVIGATION_INDEX</div>
+                <a href="../index.html" class="sys-link">> /home</a>
+                <a href="../index.html#services" class="sys-link">> /modules/services</a>
+                <a href="../index.html#industries" class="sys-link">> /modules/industries</a>
+                <a href="../index.html#case-study" class="sys-link">> /data/case_studies</a>
+                <a href="../contact.html" class="sys-link">> /cmd/contact</a>
+            </div>
+
+            <div class="sys-col sys-data">
+                <div class="sys-header">> COMPANY_INFO</div>
+                <div class="sys-contact">
+                    <p>AutoIQ Labs Inc.</p>
+                    <p>101 Automation Blvd, Tech City</p>
+                    <p>contact@autoiq.labs</p>
+                    <div class="sys-socials">
+                        <a href="#">[LINKEDIN]</a>
+                        <a href="#">[TWITTER]</a>
+                        <a href="#">[GITHUB]</a>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="sys-bottom">
             <span>© 2026 AUTOIQ LABS. ALL RIGHTS RESERVED.</span>
-            <span id="utc-time">2026-02-14 12:00:00</span>
-            <span class="blink">_</span>
-        </div>
+            <span class="sys-time">UTC: <span id="utc-time">00:00:00</span> <span class="blink">_</span></span>
         </div>
     </footer>
 
