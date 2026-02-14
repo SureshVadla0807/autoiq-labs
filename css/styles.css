@@ -117,9 +117,9 @@ nav {
 
 .footer-logo {
     max-width: 260px;
-    width: 100%;
     height: auto;
-    margin-bottom: 20px;
+    margin: 0 0 20px 0;
+    display: block;
 }
 
 .nav-links {
@@ -493,6 +493,10 @@ section {
     perspective: 1000px;
 }
 
+.service-card {
+    cursor: default;
+}
+
 .service-card::before,
 .industry-card::before {
     content: '';
@@ -717,6 +721,19 @@ section {
 .sys-desc {
     color: rgba(255, 255, 255, 0.8);
     margin-bottom: 5px;
+}
+
+a.sys-desc {
+    text-decoration: none;
+    transition: color 0.3s;
+    display: block;
+    color: rgba(255, 255, 255, 0.8);
+    width: fit-content;
+}
+
+a.sys-desc:hover {
+    color: var(--accent-blue);
+    text-shadow: 0 0 5px rgba(0, 194, 255, 0.5);
 }
 
 .sys-header {
@@ -1584,4 +1601,16 @@ textarea {
     .flow-container {
         padding: 40px 20px;
     }
+}
+
+/* Fix excessive gap on industry pages */
+#other-industries {
+    padding-bottom: 40px;
+    padding-top: 80px;
+}
+
+#tech-stack,
+#cta {
+    padding-bottom: 80px;
+    padding-top: 80px;
 }

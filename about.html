@@ -50,7 +50,9 @@
 
 <body>
     <nav>
-        <div class="logo">AUTO<span>IQ</span></div>
+        <div class="logo">
+            <a href="index.html">AUTO<span>IQ</span></a>
+        </div>
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="index.html#services">Solutions</a></li>
@@ -67,12 +69,49 @@
         <p style="color: var(--text-secondary); margin-top: 20px;">Content coming soon...</p>
     </main>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-logo">AUTO<span>IQ</span></div>
-            <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="contact.html">Contact</a>
+    <footer class="terminal-footer">
+        <div class="sys-status-bar">
+            <span class="status-item"><span class="led green"></span>SYSTEM: ONLINE</span>
+            <span class="status-item">SECURE CONNECTION ESTABLISHED</span>
+            <span class="status-item">LATENCY: <span id="sys-latency">12ms</span></span>
+            <span class="status-item right">V.2.4.0</span>
+        </div>
+
+        <div class="sys-grid">
+            <div class="sys-col sys-identity">
+                <img src="images/autoiq-logo-white.png" alt="AutoIQ Labs" class="footer-logo">
+                <a href="about.html" class="sys-desc">About Us</a>
+                <p class="sys-desc">Auth: AutoIQ Labs</p>
             </div>
-            <div class="footer-copy">© 2026 AutoIQ Labs. All rights reserved.</div>
+
+            <div class="sys-col sys-nav">
+                <div class="sys-header">> NAVIGATION INDEX</div>
+                <a href="index.html" class="sys-link">> Home</a>
+                <a href="index.html#services" class="sys-link">> Solutions</a>
+                <a href="index.html#industries" class="sys-link">> Industries</a>
+                <a href="index.html#process" class="sys-link">> Process</a>
+                <a href="about.html" class="sys-link">> About</a>
+                <a href="contact.html" class="sys-link">> Contact</a>
+            </div>
+
+            <div class="sys-col sys-data">
+                <div class="sys-header">> COMPANY INFO</div>
+                <div class="sys-contact">
+                    <p>AutoIQ Labs</p>
+                    <p>Jayabari Silicon, Kondapur , Hyderabad 500085</p>
+                    <p>mohan@autoiqlabs.com</p>
+                    <p>+91 88864 17238</p>
+                    <div class="sys-socials">
+                        <a href="#">[LINKEDIN]</a>
+                        <a href="https://www.instagram.com/autoiqlabs">[INSTAGRAM]</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sys-bottom">
+            <span>© 2026 AUTOIQ LABS. ALL RIGHTS RESERVED.</span>
+            <span class="sys-time">UTC: <span id="utc-time">00:00:00</span> <span class="blink">_</span></span>
         </div>
     </footer>
 </body>

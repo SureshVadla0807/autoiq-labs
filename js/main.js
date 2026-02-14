@@ -167,7 +167,10 @@ const caseObserver = new IntersectionObserver(entries => {
     });
 }, { threshold: 0.5 });
 
-caseObserver.observe(document.querySelector('.case-study'));
+const caseStudyElement = document.querySelector('.case-study');
+if (caseStudyElement) {
+    caseObserver.observe(caseStudyElement);
+}
 
 // Smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -404,217 +407,171 @@ function initParticles() {
     animate();
 }
 
-// Initialize Three.js animation
-initThree();
-initParticles();
+// Initialize everything on load
+// Contact Form Submission Handler
+async function initContactForm() {
+    const form = document.getElementById('consultationForm');
+    if (!form) return;
 
-// Advanced Visual Effects
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-// 1. Typing Animation
-function typeWriterEffect() {
-    const heroTitle = document.querySelector('.hero h1');
-    if (!heroTitle) return;
+        const submitBtn = form.querySelector('.submit-btn');
+        const originalBtnText = submitBtn.textContent;
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
 
-    // Capture the original text before clearing it
-    const originalText = heroTitle.innerHTML;
-    heroTitle.innerHTML = '';
-    heroTitle.classList.add('typing-cursor');
+        // Collect form data
+        const formData = new FormData(form);
 
-    // Split by <br> to handle line break
-    // We treat <br> as a delimiter to preserve the structure
-    const lines = originalText.split('<br>');
-    let lineIndex = 0;
-    let charIndex = 0;
+        // Add Web3Forms access key
+        formData.append('access_key', 'caddfb3d-ee23-40f0-9cf3-a9d841b8ddc9');
 
-    function type() {
-        if (lineIndex < lines.length) {
-            if (charIndex < lines[lineIndex].length) {
-                heroTitle.innerHTML += lines[lineIndex].charAt(charIndex);
-                charIndex++;
-                setTimeout(type, 50);
+        try {
+            const response = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                alert('Thank you! Your message has been sent successfully.');
+                form.reset();
             } else {
-                if (lineIndex < lines.length - 1) {
-                    heroTitle.innerHTML += "<br>";
-                }
-                lineIndex++;
-                charIndex = 0;
-                setTimeout(type, 50);
+                console.error('Form submission error:', result);
+                throw new Error(result.message || 'Submission failed');
             }
-        } else {
-            heroTitle.classList.remove('typing-cursor');
+        } catch (error) {
+            console.error('Form submission error:', error.message);
+            alert('Something went wrong. Please try again later.');
+        } finally {
+            submitBtn.textContent = originalBtnText;
+            submitBtn.disabled = false;
         }
-    }
-
-    // Clear initial content then type
-    setTimeout(type, 500);
+    });
 }
 
-// 2. Magnetic Buttons
-document.querySelectorAll('.btn-primary, .nav-cta').forEach(btn => {
-    btn.addEventListener('mousemove', (e) => {
-        const rect = btn.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-
-        btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
-    });
-
-    btn.addEventListener('mouseleave', () => {
-        btn.style.transform = 'translate(0, 0)';
-    });
-});
-
-// 3. Scroll Reveal
-const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            revealObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('section').forEach(section => {
-    section.classList.add('reveal-on-scroll');
-    revealObserver.observe(section);
-});
-
-// 4. Floating HUD Navbar
-window.addEventListener('scroll', () => {
-    const nav = document.querySelector('nav');
-    if (window.scrollY > 50) {
-        nav.classList.add('nav-floating');
-    } else {
-        nav.classList.remove('nav-floating');
-    }
-});
-
-// Initialize Effects
+// Initialize everything on load
 document.addEventListener('DOMContentLoaded', () => {
-    typeWriterEffect();
+    // 5. Contact Form
+    initContactForm();
 
-    // Holographic 3D Tilt & Spotlight Effect
-    document.querySelectorAll('.service-card, .industry-card').forEach(card => {
-        // Add spotlight element
-        const spotlight = document.createElement('div');
-        spotlight.classList.add('spotlight');
-        card.appendChild(spotlight);
-
-        // Add scan line element
-        const scanLine = document.createElement('div');
-        scanLine.classList.add('scan-line');
-        card.appendChild(scanLine);
-
-        // Track mouse movement
-        card.addEventListener('mousemove', e => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            // Spotlight position
-            card.style.setProperty('--mouse-x', `${x}px`);
-            card.style.setProperty('--mouse-y', `${y}px`);
-
-            // 3D Tilt Calculation
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-
-            // Calculate roatation based on cursor position relative to center
-            // Max rotation: +/- 10 degrees
-            const rotateX = ((y - centerY) / centerY) * -10;
-            const rotateY = ((x - centerX) / centerX) * 10;
-
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
-        });
-
-        // Reset on mouse leave
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
-        });
-    });
-
-    // Terminal Footer Logic
-    function initTerminalFooter() {
-        // 1. UTC Clock
-        const timeDisplay = document.getElementById('utc-time');
-        if (timeDisplay) {
-            setInterval(() => {
-                const now = new Date();
-                timeDisplay.textContent = now.toISOString().split('T')[1].split('.')[0];
-            }, 1000);
+    // 1. Three.js Animation
+    try {
+        if (typeof THREE !== 'undefined' && typeof initThree === 'function') {
+            initThree();
+        } else {
+            console.warn('Three.js not loaded or initThree not defined');
         }
-
-        // 2. Random Latency
-        const latencyDisplay = document.getElementById('sys-latency');
-        if (latencyDisplay) {
-            setInterval(() => {
-                const ms = Math.floor(Math.random() * 40) + 10;
-                latencyDisplay.textContent = `${ms}ms`;
-                latencyDisplay.style.color = ms > 40 ? '#ff3333' : 'inherit';
-            }, 2000);
-        }
-        // 3. (Logs Removed)
+    } catch (e) {
+        console.error('Three.js init failed:', e);
     }
 
-    initTerminalFooter();
+    // 2. Particles
+    try {
+        if (typeof initParticles === 'function') {
+            initParticles();
+        }
+    } catch (e) {
+        console.error('Particles init failed:', e);
+    }
 
-    // Interactive Precision Cursor
-    function initCustomCursor() {
-        const cursorDot = document.querySelector('.cursor-dot');
-        const cursorReticle = document.querySelector('.cursor-reticle');
+    // 3. UI Effects
+    try {
+        if (typeof typeWriterEffect === 'function') typeWriterEffect();
 
-        // Hide if elements don't exist (e.g. touch device fallback)
-        if (!cursorDot || !cursorReticle) return;
-
-        let mouseX = 0;
-        let mouseY = 0;
-        let reticleX = 0;
-        let reticleY = 0;
-
-        // Track mouse position
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-
-            // Dot follows instantly
-            cursorDot.style.left = `${mouseX}px`;
-            cursorDot.style.top = `${mouseY}px`;
+        // 4. Floating HUD Navbar
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (nav) {
+                if (window.scrollY > 50) {
+                    nav.classList.add('nav-floating');
+                } else {
+                    nav.classList.remove('nav-floating');
+                }
+            }
         });
 
-        // Reticle follows with delay (Loop)
-        function animateReticle() {
-            // Linear interpolation for smooth lag (0.15 = speed)
-            reticleX += (mouseX - reticleX) * 0.15;
-            reticleY += (mouseY - reticleY) * 0.15;
+        // Holographic cards
+        document.querySelectorAll('.service-card, .industry-card').forEach(card => {
+            const spotlight = document.createElement('div');
+            spotlight.classList.add('spotlight');
+            card.appendChild(spotlight);
 
-            cursorReticle.style.left = `${reticleX}px`;
-            cursorReticle.style.top = `${reticleY}px`;
+            const scanLine = document.createElement('div');
+            scanLine.classList.add('scan-line');
+            card.appendChild(scanLine);
 
-            requestAnimationFrame(animateReticle);
-        }
-        animateReticle();
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
 
-        // Hover Interactions
-        const interactiveElements = document.querySelectorAll('a, button, .service-card, .industry-card, .sys-link, .tech-item');
-
-        interactiveElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                document.body.classList.add('cursor-hover');
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -10;
+                const rotateY = ((x - centerX) / centerX) * 10;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
             });
-            el.addEventListener('mouseleave', () => {
-                document.body.classList.remove('cursor-hover');
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
             });
         });
 
-        // Click Interactions
-        document.addEventListener('mousedown', () => {
-            document.body.classList.add('cursor-active');
-        });
+        // Terminal Footer
+        if (typeof initTerminalFooter === 'function') initTerminalFooter();
+        else {
+            // Inline fallback if function definition was lost in refactor
+            const timeDisplay = document.getElementById('utc-time');
+            if (timeDisplay) {
+                setInterval(() => {
+                    const now = new Date();
+                    timeDisplay.textContent = now.toISOString().split('T')[1].split('.')[0];
+                }, 1000);
+            }
+        }
 
-        document.addEventListener('mouseup', () => {
-            document.body.classList.remove('cursor-active');
-        });
+        // Custom Cursor
+        if (typeof initCustomCursor === 'function') initCustomCursor();
+        else {
+            // Inline fallback
+            const cursorDot = document.querySelector('.cursor-dot');
+            const cursorReticle = document.querySelector('.cursor-reticle');
+
+            if (cursorDot && cursorReticle) {
+                let mouseX = 0, mouseY = 0, reticleX = 0, reticleY = 0;
+                document.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                    cursorDot.style.left = `${mouseX}px`;
+                    cursorDot.style.top = `${mouseY}px`;
+                });
+
+                function animateReticle() {
+                    reticleX += (mouseX - reticleX) * 0.15;
+                    reticleY += (mouseY - reticleY) * 0.15;
+                    cursorReticle.style.left = `${reticleX}px`;
+                    cursorReticle.style.top = `${reticleY}px`;
+                    requestAnimationFrame(animateReticle);
+                }
+                animateReticle();
+
+                // Interactive elements hover
+                document.querySelectorAll('a, button, input, select, textarea').forEach(el => {
+                    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+                    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+                });
+
+                document.addEventListener('mousedown', () => document.body.classList.add('cursor-active'));
+                document.addEventListener('mouseup', () => document.body.classList.remove('cursor-active'));
+            }
+        }
+
+    } catch (e) {
+        console.error('UI Effects init failed:', e);
     }
-
-    initCustomCursor();
 });
