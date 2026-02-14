@@ -415,18 +415,13 @@ function typeWriterEffect() {
     const heroTitle = document.querySelector('.hero h1');
     if (!heroTitle) return;
 
-    const text = heroTitle.innerHTML; // Keep HTML like <br>
+    // Capture the original text before clearing it
+    const originalText = heroTitle.innerHTML;
     heroTitle.innerHTML = '';
     heroTitle.classList.add('typing-cursor');
 
-    let i = 0;
-    // We need to handle HTML tags differently to not break them
-    // Simple approach: Strip tags for typing, or use a library.
-    // Manual approach:
-    const originalText = "Enterprise Automation.<br>Engineered for Scale.";
-    heroTitle.innerHTML = "";
-
     // Split by <br> to handle line break
+    // We treat <br> as a delimiter to preserve the structure
     const lines = originalText.split('<br>');
     let lineIndex = 0;
     let charIndex = 0;

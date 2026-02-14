@@ -4,74 +4,380 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finance & Banking Automation Solutions | AutoIQ Labs</title>
-
-    <!-- SEO Meta Tags -->
-    <meta name="description"
-        content="Automate trading, risk management, and compliance in the financial sector. Enterprise-grade automation solutions for banks, fintech, and financial institutions.">
-    <meta name="keywords"
-        content="finance automation, banking automation, trading automation, risk management automation, financial compliance, fintech automation">
-    <meta name="author" content="AutoIQ Labs">
-    <meta name="robots" content="index, follow">
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://autoiqlabs.com/industries/finance.html">
-    <meta property="og:title" content="Finance & Banking Automation Solutions | AutoIQ Labs">
-    <meta property="og:description"
-        content="Automate trading, risk management, and compliance in the financial sector with intelligent automation.">
-    <meta property="og:image" content="https://autoiqlabs.com/images/og-image.jpg">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://autoiqlabs.com/industries/finance.html">
-    <meta property="twitter:title" content="Finance & Banking Automation Solutions | AutoIQ Labs">
-    <meta property="twitter:description"
-        content="Automate trading, risk management, and compliance in the financial sector with intelligent automation.">
-    <meta property="twitter:image" content="https://autoiqlabs.com/images/og-image.jpg">
-
+    <title>Finance Automation Solutions | AutoIQ Labs</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
-    <style>
-        main {
-            padding: 140px 60px 100px;
-            max-width: 1400px;
-            margin: 0 auto;
-            min-height: calc(100vh - 300px);
-        }
-
-        @media (max-width: 768px) {
-            main {
-                padding: 120px 30px 80px;
-            }
-        }
-    </style>
 </head>
 
 <body>
+    <canvas id="particle-canvas"></canvas>
+    <div class="page-transition" id="pageTransition"></div>
     <nav>
         <div class="logo">AUTO<span>IQ</span></div>
         <ul class="nav-links">
             <li><a href="../index.html">Home</a></li>
-            <li><a href="../about.html">About</a></li>
-            <li><a href="../contact.html">Contact</a></li>
-        </ul><button class="nav-cta">Book Consultation</button>
+            <li><a href="#challenges">Challenges</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#results">Results</a></li>
+        </ul><button class="nav-cta" onclick="window.location.href='../contact.html'">Book Consultation</button>
     </nav>
 
-    <main>
-        <!-- CONTENT WILL BE ADDED HERE -->
-        <h1>Finance Automation</h1>
-        <p style="color: var(--text-secondary); margin-top: 20px;">Content coming soon...</p>
-    </main>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Intelligent Automation for<br>Financial Services</h1>
+            <p class="hero-subtext">Automate trading, risk management, and compliance with AI-driven systems that
+                process financial data in real-time.</p>
+            <div class="hero-buttons">
+                <button class="btn-primary" onclick="window.location.href='../contact.html'">Schedule Strategy
+                    Call</button>
+                <button class="btn-secondary">View Case Study</button>
+            </div>
+        </div>
+        <div class="hero-3d">
+            <div id="hero-canvas"></div>
+        </div>
+    </section>
+
+    <section id="challenges">
+        <div class="section-header">
+            <h2>💰 Industry Challenges</h2>
+            <p>Financial institutions face increasing pressure to automate while maintaining compliance.</p>
+        </div>
+        <div class="services-grid grid-4">
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                        <polyline points="17 18 23 18 23 12"></polyline>
+                    </svg>
+                </div>
+                <h3>Manual Trading</h3>
+                <p>Slow execution times and human error in high-frequency trading environments.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                        </path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <h3>Risk Management</h3>
+                <p>Complex risk calculations require real-time data processing capabilities.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </div>
+                <h3>Compliance Burden</h3>
+                <p>Regulatory reporting demands accurate, auditable automated processes.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                </div>
+                <h3>Data Overload</h3>
+                <p>Massive volumes of financial data require intelligent analysis systems.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="solution">
+        <div class="section-header">
+            <h2>Our Solution</h2>
+            <p>Financial automation architecture built for speed, accuracy, and compliance.</p>
+        </div>
+
+        <div class="solution-container">
+            <!-- Top: 2x2 Feature Grid -->
+            <div class="solution-grid">
+                <div class="solution-item">
+                    <div class="solution-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="solution-content">
+                        <h3>Automated Trading</h3>
+                        <p>Algorithmic trading systems with real-time execution and market analysis.</p>
+                    </div>
+                </div>
+                <div class="solution-item">
+                    <div class="solution-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="solution-content">
+                        <h3>AI Risk Models</h3>
+                        <p>Predictive risk assessment using machine learning on historical data.</p>
+                    </div>
+                </div>
+                <div class="solution-item">
+                    <div class="solution-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                            <polyline points="17 6 23 6 23 12"></polyline>
+                        </svg>
+                    </div>
+                    <div class="solution-content">
+                        <h3>Real-Time Analytics</h3>
+                        <p>Live portfolio tracking with automated rebalancing recommendations.</p>
+                    </div>
+                </div>
+                <div class="solution-item">
+                    <div class="solution-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                        </svg>
+                    </div>
+                    <div class="solution-content">
+                        <h3>API Integration</h3>
+                        <p>Connect banking systems, exchanges, and regulatory reporting tools.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom: Flow Diagram -->
+            <div class="flow-container">
+                <div class="flow-title">Financial Automation Flow</div>
+                <div class="flow-steps">
+                    <div class="flow-step">Market Data</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">AI Analysis</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">Risk Check</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">Auto Trade</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">Report</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="results">
+        <div class="case-study">
+            <div class="case-content">
+                <h3>Results</h3>
+                <h2>Measurable outcomes from our financial automation implementations.</h2>
+                <div class="case-metrics">
+                    <div class="metric">
+                        <div class="metric-value">89%</div>
+                        <div class="metric-label">Faster Trade Execution</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">62%</div>
+                        <div class="metric-label">Cost Reduction</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">99.97%</div>
+                        <div class="metric-label">Accuracy Rate</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">8 weeks</div>
+                        <div class="metric-label">Deployment Time</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tech-stack">
+        <div class="section-header">
+            <h2>Technology Used</h2>
+            <p>Enterprise tools selected for financial performance and security.</p>
+        </div>
+        <div class="tech-grid">
+            <div class="tech-item"><span class="icon">
+                    <!-- Trading Systems (Chart) -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                </span><span>Trading Systems</span></div>
+
+            <div class="tech-item"><span class="icon">
+                    <!-- AWS Smile Logo -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M18.8 14.5C18.8 14.5 15.6 18.2 10.4 18.2C5.9 18.2 2.6 15.1 2.6 15.1C2.6 15.1 2.2 14.7 2.1 15.2C1.9 15.7 1.8 16.3 1.8 16.3C1.8 16.3 5.4 20.3 10.5 20.3C16.8 20.3 20.2 15.9 20.2 15.9C20.2 15.9 20.5 15.5 20.1 15.1C19.7 14.7 18.8 14.5 18.8 14.5ZM13.8 2.7H11.5L8.2 11.2H10.4L11 9.4H14.3L14.9 11.2H17.2L13.8 2.7ZM11.7 7.6L12.6 4.9L13.6 7.6H11.7ZM5.7 11.2H7.9L6.1 5.6L8 2.7H5.6L4.8 4.7L3.9 2.7H1.5L3.3 5.7L1.6 11.2H3.8L4.7 7.8L5.7 11.2ZM24 7.8C23.8 7.7 23.7 7.5 23.5 7.4C22.6 6.8 21.6 6.6 20.8 6.6C19.1 6.6 18.2 7.4 18.2 8.5C18.2 9.5 18.8 10 20.5 10.3C21.9 10.6 22.9 10.9 22.9 11.9C22.9 12.8 22.1 13.5 20.6 13.5C19.4 13.5 18 13 17.2 12.3C17 12.2 16.9 12.3 16.9 12.5V13.8C16.9 14 17.1 14.1 17.2 14.2C18.2 15 19.5 15.3 20.7 15.3C22.6 15.3 25.1 14.3 25.1 11.8C25.1 10.5 24.3 9.7 22.4 9.4C21.1 9.1 20.4 8.9 20.4 8.2C20.4 7.7 20.8 7.5 21.5 7.5C22.3 7.5 23.3 8 23.9 8.5C24.1 8.6 24.2 8.5 24.2 8.3L24 7.8Z" />
+                    </svg>
+                </span><span>AWS Finance</span></div>
+
+            <div class="tech-item"><span class="icon">
+                    <!-- n8n -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.2L19.8 8 12 11.8 4.2 8 12 4.2zm-1 14.6L4.2 15V8.8l6.8 3.4v6.6zm2 0V12.2l6.8-3.4V15l-6.8 3.8z" />
+                    </svg>
+                </span><span>n8n</span></div>
+
+            <div class="tech-item"><span class="icon">
+                    <!-- Node.js -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 2l-9.8 5.6v10.8l9.8 5.6 9.8-5.6V7.6L12 2zm0 2.3l7.3 4.2-2.3 1.3-5-2.9-5 2.9-2.3-1.3L12 4.3z" />
+                    </svg>
+                </span><span>Node.js</span></div>
+
+            <div class="tech-item"><span class="icon">
+                    <!-- ChatGPT/OpenAI -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M22.28 9.82c-.09-.44-.28-.85-.56-1.18-.27-.34-.62-.61-1-.78L19.47 7.33V6.01c0-.45-.12-.89-.35-1.27-.23-.39-.55-.71-.94-.94-.39-.22-.84-.35-1.3-.35-.46 0-.91.1-1.31.32L11.84 5.74 8.12 3.77c-.81-.43-1.79-.43-2.6 0-.81.43-1.31 1.28-1.31 2.18v3.94L2.24 10.92c-.79.41-1.27 1.23-1.25 2.14.02.91.54 1.7 1.35 2.09l1.25.53v1.32c0 .91.5 1.75 1.31 2.18.81.43 1.79.43 2.6 0l3.73-1.97 3.73 1.97c.81.43 1.79.43 2.6 0 .81-.43 1.31-1.28 1.31-2.18v-3.94l1.97-1.03c.79-.41 1.27-1.23 1.25-2.14-.02-.91-.54-1.7-1.35-2.09l.2-.07zM7.18 17.65c-.46-.24-.76-.71-.76-1.23v-2.39l2.42-1.28v5.52l-1.66-.62zm-1.03-9.9c0-.52.3-1 .76-1.23l1.85-.98v5.33L5.45 12.6V8.97l.7-.42v-.8zm7.76-2.58c.46.24.76.71.76 1.23v2.39L12.25 10.07V4.55l1.66.62zm1.68 3.01l1.85.98v3.63l-3.32-1.76V6.15l1.47 1.77.7-.42zm-1.68 11.89c-.46-.24-.76-.71-.76-1.23v-2.39l2.42-1.28v5.52l-1.66-.62zm2.67-4.13l1.47-1.77-.7.42v.8c0 .52-.3 1-.76 1.23l-1.85.98v-5.33l3.32 1.76v1.91zM9.44 5.34l1.47 1.77.7-.42v.8c0 .52-.3 1-.76 1.23l-1.85.98v-5.33l3.32 1.76v1.91v-1.91-.8z" />
+                    </svg>
+                </span><span>OpenAI</span></div>
+
+            <div class="tech-item"><span class="icon">
+                    <!-- SEC Compliance (Lock) -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </span><span>SEC Compliance</span></div>
+        </div>
+    </section>
+
+    <section id="cta">
+        <div class="section-header">
+            <h2>Ready to Automate Your Financial Operations?</h2>
+            <p>Accelerate trading and reduce risk with intelligent automation.</p>
+            <div style="margin-top: 30px;">
+                <button class="nav-cta" onclick="window.location.href='../contact.html'">Book Consultation</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="other-industries">
+        <div class="section-header">
+            <h2>Explore Other Industries</h2>
+            <p>Discover automation solutions tailored to your sector.</p>
+        </div>
+        <div class="industries-grid grid-4">
+            <a href="healthcare.html" class="industry-card">
+                <span class="industry-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                </span>
+                <h3>Healthcare</h3>
+            </a>
+            <a href="ecommerce.html" class="industry-card">
+                <span class="industry-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                </span>
+                <h3>E-commerce</h3>
+            </a>
+            <a href="manufacturing.html" class="industry-card">
+                <span class="industry-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 13L22 4"></path>
+                        <path d="M17 19a5 5 0 0 0-1-9.9"></path>
+                        <path d="M22 22v-3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v3"></path>
+                    </svg>
+                </span>
+                <h3>Manufacturing</h3>
+            </a>
+            <a href="saas.html" class="industry-card">
+                <span class="industry-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+                    </svg>
+                </span>
+                <h3>SaaS</h3>
+            </a>
+        </div>
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="../index.html#industries" style="color: var(--accent-blue); text-decoration: none;">View All
+                Industries →</a>
+        </div>
+    </section>
 
     <footer>
-        <div class="footer-content">
-            <div class="footer-logo">AUTO<span>IQ</span></div>
-            <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="../contact.html">Contact</a>
+        <div class="terminal-footer">
+            <div class="sys-status-bar">
+                <span>SYSTEM: ONLINE</span>
+                <span>SECURE CONNECTION ESTABLISHED</span>
+                <span id="sys-latency" style="color: #00ff41;">LATENCY: 12ms</span>
             </div>
-            <div class="footer-copy">© 2026 AutoIQ Labs. All rights reserved.</div>
+            <div class="sys-grid">
+                <div class="sys-identity">
+                    <pre>
+    _  _  ____  __  __
+   ( \/ )(_  _)(  )(  )
+    )  (   )(   )(__)(
+   (_/\_) (__) (______)
+                    </pre>
+                    <p>AUTOIQ LABS<br>ENTERPRISE AUTOMATION</p>
+                </div>
+                <div class="sys-nav">
+                    <div class="sys-header">NAVIGATION_INDEX</div>
+                    <a href="../index.html" class="sys-link">> /home</a>
+                    <a href="../index.html#services" class="sys-link">> /services</a>
+                    <a href="../index.html#industries" class="sys-link">> /industries</a>
+                    <a href="../about.html" class="sys-link">> /about</a>
+                    <a href="../contact.html" class="sys-link">> /contact</a>
+                </div>
+                <div class="sys-contact">
+                    <div class="sys-header">COMPANY_INFO</div>
+                    <p>123 Innovation Drive<br>Tech District, CA 94000</p>
+                    <p>contact@autoiqlabs.com</p>
+                    <p>+1 (555) 123-4567</p>
+                    <div class="sys-socials">
+                        <a href="#">[LINKEDIN]</a>
+                        <a href="#">[TWITTER]</a>
+                        <a href="#">[GITHUB]</a>
+                    </div>
+                </div>
+            </div>
+            <div class="sys-bottom">
+                <span>© 2026 AUTOIQ LABS. ALL RIGHTS RESERVED.</span>
+                <span id="utc-time">2026-02-14 12:00:00</span>
+                <span class="blink">_</span>
+            </div>
         </div>
     </footer>
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-reticle"></div>
+    <script src="../js/main.js"></script>
 </body>
 
 </html>
