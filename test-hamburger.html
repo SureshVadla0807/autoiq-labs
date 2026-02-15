@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamburger Test</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <a href="index.html"><img src="images/autoiq-logo-white-name.png" alt="AutoIQ Labs" class="navbar-logo"></a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <button class="nav-cta" onclick="window.location.href='contact.html'">Book Consultation</button>
+
+        <!-- Mobile Hamburger Menu -->
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <div style="padding: 100px 20px; text-align: center;">
+        <h1>Hamburger Menu Test</h1>
+        <p>Resize window to &lt;= 1024px to see hamburger</p>
+        <p>Click hamburger to test functionality</p>
+        <div id="test-output"
+            style="margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+            <p>Status: <span id="status">Waiting...</span></p>
+            <p>Window Width: <span id="width">0</span>px</p>
+            <p>Hamburger Visible: <span id="visible">No</span></p>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Test script
+        function updateStatus() {
+            const width = window.innerWidth;
+            const hamburger = document.getElementById('hamburger');
+            const computedStyle = window.getComputedStyle(hamburger);
+
+            document.getElementById('width').textContent = width;
+            document.getElementById('visible').textContent = computedStyle.display !== 'none' ? 'Yes' : 'No';
+        }
+
+        window.addEventListener('resize', updateStatus);
+        setInterval(updateStatus, 100);
+
+        // Log hamburger clicks
+        const hamburger = document.getElementById('hamburger');
+        if (hamburger) {
+            hamburger.addEventListener('click', () => {
+                document.getElementById('status').textContent = 'Clicked at ' + new Date().toLocaleTimeString();
+            });
+        }
+    </script>
+</body>
+
+</html>

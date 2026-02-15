@@ -21,6 +21,10 @@
 
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    /* Prevent horizontal scroll */
+    max-width: 100vw;
+    /* Ensure html doesn't exceed viewport */
 }
 
 body {
@@ -31,6 +35,10 @@ body {
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
+    max-width: 100vw;
+    /* Ensure body doesn't exceed viewport */
+    position: relative;
+    /* Contain absolute children */
 }
 
 /* Page Transition */
@@ -277,6 +285,162 @@ nav {
     /* Allow wrapping */
     overflow: hidden;
     /* Fix parallax overlap */
+}
+
+/* ============================================
+   HAMBURGER MENU (Mobile/Tablet)
+   ============================================ */
+
+.hamburger {
+    display: none;
+    /* Hidden on desktop */
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 25px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    margin-left: auto;
+    /* Push to right */
+    z-index: 1000;
+    /* Ensure it's above everything */
+    transition: transform 0.3s ease;
+    outline: none;
+    /* Remove focus outline */
+    pointer-events: auto;
+    /* Ensure it's clickable */
+    position: relative;
+    /* Establish stacking context */
+}
+
+.hamburger span {
+    width: 100%;
+    height: 3px;
+    background: var(--accent-blue);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 194, 255, 0.3);
+}
+
+/* Hamburger Animation when active */
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* ============================================
+   RESPONSIVE: TABLET & MOBILE NAVIGATION
+   ============================================ */
+
+@media (max-width: 1024px) {
+
+    /* Show hamburger on tablet/mobile */
+    .hamburger {
+        display: flex !important;
+        max-width: 30px;
+        /* Override max-width: 100% */
+    }
+
+    /* Hide desktop nav items, show as slide-in menu */
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: rgba(6, 11, 25, 0.98);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 80px 30px 30px;
+        gap: 0;
+        border-left: 1px solid rgba(0, 194, 255, 0.3);
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+        transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 100;
+        overflow-y: auto;
+    }
+
+    .nav-links.active {
+        right: 0;
+    }
+
+    .nav-links li {
+        width: 100%;
+        margin: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-links li a {
+        display: block;
+        padding: 15px 10px;
+        font-size: 1.1rem;
+        width: 100%;
+    }
+
+    /* Mobile dropdown styles */
+    .dropdown-content {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 8px;
+        margin-top: 5px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .dropdown.active .dropdown-content {
+        max-height: 500px;
+    }
+
+    .dropdown-content a {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+    }
+
+    /* Nested dropdown on mobile */
+    .dropdown-submenu .sub-menu {
+        position: static;
+        margin-left: 15px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .dropdown-submenu.active .sub-menu {
+        max-height: 400px;
+    }
+
+    /* Hide desktop CTA button on mobile */
+    .nav-cta {
+        display: none;
+    }
+
+    /* Adjust nav padding */
+    nav {
+        padding: 15px 20px;
+    }
+
+    .nav-floating {
+        width: 95%;
+        padding: 10px 20px;
+    }
 }
 
 @media (max-width: 1024px) {
@@ -1320,46 +1484,144 @@ body {
 }
 
 @media (max-width: 768px) {
+
+    /* Prevent Horizontal Scroll - Critical */
+    *:not(.hamburger):not(.hamburger span) {
+        max-width: 100%;
+    }
+
+    html,
+    body {
+        overflow-x: hidden !important;
+        width: 100%;
+    }
+
+    /* Navigation */
     nav {
-        padding: 15px 30px;
+        padding: 15px 20px;
+        width: 100%;
+        max-width: 100vw;
+        box-sizing: border-box;
     }
 
     .nav-links {
         display: none;
+        /* Hidden by default, shown via JS */
     }
 
+    /* Sections & Spacing */
     section {
-        padding: 80px 30px;
+        padding: 60px 20px;
+        width: 100%;
+        max-width: 100vw;
+        box-sizing: border-box;
+        overflow-x: hidden;
     }
 
+    /* Typography - Mobile Optimized */
     .hero h1 {
-        font-size: 2.2rem;
+        font-size: 2rem;
+        line-height: 1.2;
     }
 
+    .hero-subtext {
+        font-size: 1rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+    }
+
+    p {
+        font-size: 0.95rem;
+    }
+
+    /* Hero Section - Mobile */
+    .hero {
+        min-height: 70vh;
+        padding-top: 100px;
+    }
+
+    #hero-canvas {
+        display: none !important;
+        /* Hide Three.js on mobile */
+    }
+
+    .hero-3d {
+        display: none;
+        /* Hide 3D container on mobile */
+    }
+
+    .hero-bullets {
+        font-size: 0.9rem;
+    }
+
+    /* Grids - Single Column on Mobile */
     .industries-grid,
     .services-grid {
         grid-template-columns: 1fr;
-    }
-
-    .case-metrics {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .footer-content {
-        flex-direction: column;
         gap: 20px;
-        text-align: center;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
-    .footer-links {
-        flex-wrap: wrap;
-        justify-content: center;
+    /* All containers - prevent overflow */
+    .container,
+    .hero-content,
+    .hero,
+    .footer-content {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-x: hidden;
     }
 
+    /* Cards - Mobile Optimized & Compact */
+    .service-card,
+    .industry-card {
+        padding: 20px 18px;
+        min-height: auto;
+        /* Remove fixed height */
+    }
+
+    .service-card h3,
+    .industry-card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+    }
+
+    .service-card p,
+    .industry-card p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 0;
+    }
+
+    .service-card .icon,
+    .industry-card .icon {
+        font-size: 2rem;
+        margin-bottom: 12px;
+    }
+
+    /* Buttons - Larger Touch Targets */
+    button,
+    .nav-cta,
+    .submit-btn,
+    .cta-btn {
+        min-height: 48px;
+        padding: 14px 28px;
+        font-size: 1rem;
+    }
+
+    /* Forms - Mobile Friendly */
     .contact-container {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 30px;
     }
 
     .contact-form-wrapper {
@@ -1368,10 +1630,117 @@ body {
 
     .form-row {
         grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        min-height: 48px;
+        font-size: 16px;
+        /* Prevents zoom on iOS */
+        padding: 14px;
+    }
+
+    .form-group textarea {
+        min-height: 120px;
     }
 
     .contact-info h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
+    }
+
+    /* Footer - Optimized Mobile Layout */
+    .footer-content {
+        flex-direction: column;
+        gap: 25px;
+        text-align: left;
+        /* Left-aligned for better readability */
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        text-align: left;
+    }
+
+    .footer-section {
+        padding: 0;
+    }
+
+    .footer-section h4 {
+        font-size: 1rem;
+        margin-bottom: 12px;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .footer-links a {
+        font-size: 0.9rem;
+        padding: 5px 0;
+    }
+
+    .footer-logo {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .footer-logo img {
+        max-width: 140px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .social-links {
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .social-links a {
+        font-size: 1.3rem;
+    }
+
+    /* Case Studies */
+    .case-metrics {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    /* Timeline - Vertical on Mobile */
+    .timeline-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .timeline-step {
+        width: 100%;
+    }
+
+    /* Tech Stack Grid */
+    .tech-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    /* Hide complex animations on mobile */
+    .parallax-bg {
+        display: none;
+    }
+
+    /* Reduce padding on industry pages */
+    #other-industries,
+    #tech-stack,
+    #cta {
+        padding: 60px 20px;
     }
 }
 
@@ -1405,6 +1774,18 @@ textarea {
     select,
     textarea {
         cursor: pointer;
+    }
+}
+
+/* Disable custom cursor on mobile/tablet by screen size */
+@media (max-width: 1024px) {
+    body {
+        cursor: auto !important;
+    }
+
+    .cursor-dot,
+    .cursor-reticle {
+        display: none !important;
     }
 }
 

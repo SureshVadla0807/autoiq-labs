@@ -175,8 +175,13 @@ if (caseStudyElement) {
 // Smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+
+        // Skip if href is just '#' or empty
+        if (!href || href === '#') return;
+
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+        const target = document.querySelector(href);
         target?.scrollIntoView({ behavior: 'smooth' });
     });
 });
@@ -452,32 +457,136 @@ async function initContactForm() {
     });
 }
 
+// ============================================
+// MOBILE NAVIGATION
+// ============================================
+
+function initMobileNav() {
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    const dropdowns = document.querySelectorAll('.dropdown');
+    const dropdownSubmenus = document.querySelectorAll('.dropdown-submenu');
+
+    if (!hamburger) return;
+
+    // Toggle mobile menu
+    hamburger.addEventListener('click', (e) => {
+        const isClosing = navLinks.classList.contains('active');
+
+        hamburger.classList.toggle('active');
+        navLinks.classList.toggle('active');
+        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+
+        // Close all dropdowns and submenus when closing menu
+        if (isClosing) {
+            dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+            dropdownSubmenus.forEach(submenu => submenu.classList.remove('active'));
+        }
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('active');
+            // Close all dropdowns and submenus
+            dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+            dropdownSubmenus.forEach(submenu => submenu.classList.remove('active'));
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Mobile dropdown toggle (only on mobile)
+    dropdowns.forEach(dropdown => {
+        const dropbtn = dropdown.querySelector('.dropbtn');
+        if (dropbtn) {
+            dropbtn.addEventListener('click', (e) => {
+                if (window.innerWidth <= 1024) {
+                    e.preventDefault();
+                    dropdown.classList.toggle('active');
+                }
+            });
+        }
+    });
+
+    // Mobile nested dropdown toggle
+    dropdownSubmenus.forEach(submenu => {
+        const submenuLink = submenu.querySelector('a');
+        if (submenuLink) {
+            submenuLink.addEventListener('click', (e) => {
+                if (window.innerWidth <= 1024) {
+                    e.preventDefault();
+                    submenu.classList.toggle('active');
+                }
+            });
+        }
+    });
+
+    // Close menu when clicking nav link (not dropdown)
+    navLinks.querySelectorAll('a').forEach(link => {
+        if (!link.classList.contains('dropbtn') && !link.parentElement.classList.contains('dropdown-submenu')) {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('active');
+                    // Close all dropdowns and submenus
+                    dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+                    dropdownSubmenus.forEach(submenu => submenu.classList.remove('active'));
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+    });
+}
+
 // Initialize everything on load
 document.addEventListener('DOMContentLoaded', () => {
-    // 5. Contact Form
+    // Device Detection
+    const isMobile = window.innerWidth <= 768;
+    const isTablet = window.innerWidth <= 1024 && window.innerWidth > 768;
+    const isDesktop = window.innerWidth > 1024;
+
+    console.log(`Device: ${isMobile ? 'Mobile' : isTablet ? 'Tablet' : 'Desktop'}`);
+
+    // Mobile Navigation
+    initMobileNav();
+
+    // 5. Contact Form (all devices)
     initContactForm();
 
-    // 1. Three.js Animation
-    try {
-        if (typeof THREE !== 'undefined' && typeof initThree === 'function') {
-            initThree();
-        } else {
-            console.warn('Three.js not loaded or initThree not defined');
+    // 1. Three.js Animation (Desktop & Tablet only)
+    if (!isMobile) {
+        try {
+            if (typeof THREE !== 'undefined' && typeof initThree === 'function') {
+                initThree();
+            } else {
+                console.warn('Three.js not loaded or initThree not defined');
+            }
+        } catch (e) {
+            console.error('Three.js init failed:', e);
         }
-    } catch (e) {
-        console.error('Three.js init failed:', e);
+    } else {
+        console.log('Three.js disabled on mobile for performance');
     }
 
-    // 2. Particles
+    // 2. Particles (All devices, but static on mobile)
     try {
         if (typeof initParticles === 'function') {
             initParticles();
+
+            // Disable interactivity on mobile/tablet for performance
+            if (isMobile || isTablet) {
+                console.log('Particles: Static mode (non-interactive)');
+                // The particle system will still render but won't respond to mouse
+            } else {
+                console.log('Particles: Interactive mode');
+            }
         }
     } catch (e) {
         console.error('Particles init failed:', e);
     }
 
-    // 3. UI Effects
+    // 3. UI Effects (all devices, but simplified on mobile)
     try {
         if (typeof typeWriterEffect === 'function') typeWriterEffect();
 
